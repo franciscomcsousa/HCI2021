@@ -54,9 +54,14 @@ let SECTIONB_HEIGHT;
 let SECTIONC_WIDTH;
 let SECTIONC_HEIGHT;
 
+let SPACEBAR_WIDTH;
+let SPACEBAR_HEIGHT;
+
+let BACKSPACE_WIDTH;
+let BACKSPACE_HEIGHT;
+
 let gState = "start";
 let gWritten = 0;
-let gEntry;
 
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
@@ -72,10 +77,12 @@ function preload()
   //leftArrow = loadImage("data/left.png");
   //rightArrow = loadImage("data/right.png");
 
-  keyboard = loadImage("data/keyboard.png");
-  SectionA = loadImage("data/SectionA.png");
-  SectionB = loadImage("data/SectionB.png");
-  SectionC = loadImage("data/SectionC.png");
+  keyboard  = loadImage("data/keyboard.png");
+  SectionA  = loadImage("data/SectionA.png");
+  SectionB  = loadImage("data/SectionB.png");
+  SectionC  = loadImage("data/SectionC.png");
+  spacebar  = loadImage("data/spacebar.png");
+  backspace = loadImage("data/backspace.png");
 }
 
 // Runs once at the start
@@ -135,6 +142,8 @@ function draw2Dkeyboard()
   imageMode(CORNER); 
   if(gState == "start"){
     image(keyboard, width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH, KEYBOARD_HEIGHT);
+    image(spacebar, width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT);
+    image(backspace, width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT);
   }
   else if(gState == "stateA"){
     image(SectionA, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
@@ -180,19 +189,28 @@ function mousePressed()
     */
 
       if(gState == "start"){
+        //Click within stateA boundaries
         if(mouseClickWithin(width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
           gWritten = 0;
-          gEntry = 1;
           gState = "stateA";
         }
+        //Click within stateB boundaries
         else if(mouseClickWithin(width/2 - KEYBOARD_WIDTH/6, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
-          
+          gWritten = 0;
           gState = "stateB";
         }
+        //Click within stateC boundaries
         else if(mouseClickWithin(width/2 + KEYBOARD_WIDTH/6, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
           gWritten = 0;
-          gEntry = 1;
           gState = "stateC";
+        }
+        //Spacebar is pressed
+        else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT)){
+          currently_typed += " ";
+        }
+        //Backspace is pressed
+        else if(mouseClickWithin(width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT) && currently_typed.length > 0){
+          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
         }
       }
       
@@ -467,18 +485,24 @@ function windowResized()
   ARM_LENGTH    = (int)(19   * PPCM);
   ARM_HEIGHT    = (int)(11.2 * PPCM);
   
-  //ARROW_SIZE    = (int)(2.2 * PPCM);
-  KEYBOARD_WIDTH =  (int)(4 * PPCM);
-  KEYBOARD_HEIGHT = (int)(2 * PPCM);
+  //ARROW_SIZE     = (int)(2.2 * PPCM);
+  KEYBOARD_WIDTH   = (int)(4 * PPCM);
+  KEYBOARD_HEIGHT  = (int)(2 * PPCM);
 
-  SECTIONA_WIDTH =  (int)(3 * PPCM);
-  SECTIONA_HEIGHT = (int)(3 * PPCM);
+  SECTIONA_WIDTH   = (int)(3 * PPCM);
+  SECTIONA_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONB_WIDTH =  (int)(3 * PPCM);
-  SECTIONB_HEIGHT = (int)(3 * PPCM);
+  SECTIONB_WIDTH   = (int)(3 * PPCM);
+  SECTIONB_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONC_WIDTH =  (int)(3 * PPCM);
-  SECTIONC_HEIGHT = (int)(3 * PPCM);
+  SECTIONC_WIDTH   = (int)(3 * PPCM);
+  SECTIONC_HEIGHT  = (int)(3 * PPCM);
+
+  SPACEBAR_WIDTH   = (int)(1.3 * PPCM)
+  SPACEBAR_HEIGHT  = (int)(1 * PPCM)
+
+  BACKSPACE_WIDTH  = (int)(1.3 * PPCM)
+  BACKSPACE_HEIGHT = (int)(1 * PPCM)
   
   // Starts drawing the watch immediately after we go fullscreen (DO NO CHANGE THIS!)
   draw_finger_arm = true;
