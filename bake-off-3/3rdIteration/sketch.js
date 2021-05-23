@@ -63,6 +63,8 @@ let BACKSPACE_HEIGHT;
 let gState = "start";
 let gWritten = 0;
 
+let words = [];
+
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
 {    
@@ -72,6 +74,8 @@ function preload()
     
   // Loads the target phrases (DO NOT CHANGE!)
   phrases = loadStrings("data/phrases.txt");
+  
+  words = loadStrings("data/words.txt")
 
   // Loads UI elements for our basic keyboard
   //leftArrow = loadImage("data/left.png");
@@ -96,6 +100,13 @@ function setup()
   target_phrase = phrases[current_trial];
   
   drawUserIDScreen();       // draws the user input screen (student number and display size)
+}
+
+function wordsGetter(string)
+{
+  for(word in words){
+    return word;
+  }
 }
 
 function draw()
@@ -165,8 +176,32 @@ function mousePressed()
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
     {  
+      /*    
+      // Check if mouse click was on left arrow (2D keyboard)
+      if (mouseClickWithin(width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE))
+      {
+        current_letter = getPreviousChar(current_letter);
+        if (current_letter.charCodeAt(0) < '_'.charCodeAt(0)) current_letter = 'z';  // wrap around to z
+      }
+      // Check if mouse click was on right arrow (2D keyboard)
+      else if (mouseClickWithin(width/2, height/2, ARROW_SIZE, ARROW_SIZE))
+      {
+        current_letter = getNextChar(current_letter);
+        if (current_letter.charCodeAt(0) > 'z'.charCodeAt(0)) current_letter = '_'; // wrap back to space (i.e., the underscore)
+      }
+      else
+      {
+        // Click in whitespace indicates a character input (2D keyboard)
+        if (current_letter == '_') currently_typed += " ";                          // if underscore, consider that a space bar
+        else if (current_letter == '`' && currently_typed.length > 0)               // if `, treat that as delete
+          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
+        else if (current_letter != '`') currently_typed += current_letter;          // if not any of the above cases, add the current letter to the entered phrase
+      }
+    */
+
       if(gState == "start"){
         //Click within stateA boundaries
+        print(wordsGetter(currently_typed));
         if(mouseClickWithin(width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
           gWritten = 0;
           gState = "stateA";
@@ -376,12 +411,12 @@ function startSecondAttempt()
   currently_typed      = "";
   CPS                  = 0;
   
+  //current_letter       = 'a';
+  
   // Show the watch and keyboard again
   second_attempt_button.remove();
   draw_finger_arm      = true;
   attempt_start_time   = millis();  
-
-  gState = "start"
 }
 
 // Print and save results at the end of 2 trials
