@@ -199,6 +199,8 @@ function mousePressed()
       }
     */
 
+      print("mouse was clicked");
+
       if(gState == "start"){
         //Click within stateA boundaries
         print(wordsGetter(currently_typed));
