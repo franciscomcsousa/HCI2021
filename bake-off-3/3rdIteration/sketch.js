@@ -63,8 +63,9 @@ let BACKSPACE_HEIGHT;
 let gState = "start";
 let gWritten = 0;
 
-let words = [];
-let predictions = ["the", "and", "of"];
+let words_guessed = [];
+let predicted = "the";
+let predictions_init = ["the", "of", "and"];
 
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
@@ -88,7 +89,7 @@ function preload()
   backspace = loadImage("data/backspace.png");
 
   // Loads the txt file that has the predictions
-  words = loadStrings("data/words.txt");
+  words_guessed = loadStrings("data/words.txt");
 }
 
 // Runs once at the start
@@ -143,17 +144,17 @@ function drawPredictions() {
   textAlign(CENTER);
   textFont("Arial", 12);
   fill('#FFFFFF');
-  text(predictions[0], width/2 - 1.8 * PPCM, height/2 - 1.3 * PPCM);
+  text(predictions_init[0], width/2 - 1.8 * PPCM, height/2 - 1.3 * PPCM);
 
   textAlign(CENTER);
   textFont("Arial", 12);
   fill('#FFFFFF');
-  text(predictions[1], width/2 - 0.5 * PPCM, height/2 - 1.3 * PPCM);
+  text(predictions_init[1], width/2 - 0.5 * PPCM, height/2 - 1.3 * PPCM);
 
   textAlign(CENTER);
   textFont("Arial", 12);
   fill('#FFFFFF');
-  text(predictions[2], width/2 + 1 * PPCM, height/2 - 1.3 * PPCM);
+  text(predictions_init[2], width/2 + 1 * PPCM, height/2 - 1.3 * PPCM);
 }
 
 // Draws 2D keyboard UI (current letter and left and right arrows)
@@ -396,21 +397,46 @@ function mousePressed()
 // function that changes gives 3 predictions of the word you are writing
 function doPredict() {
 
-    if (currently_typed[currently_typed.length - 1] == " ") {
-      
-    }
+  phrase = split(currently_typed, " ");     // frase incompleta escrita (divide se em palavras)
+  typed = phrase[phrase.length - 1];        // palavra incompleta escrita
+    
+  if (currently_typed[currently_typed.length - 1] == " " || phrase == "") {
+    // reiniciacao das palavras ' the, and, of '
+    predictions_init[0] = words_guessed[0];
+    predictions_init[1] = words_guessed[1];
+    predictions_init[2] = words_guessed[2];
+  }
 
+  nr_words = words_guessed.length;
+  counter_words = 0;
+  for (i = 0; i < nr_words; i++) {
+    if (counter_words >= 3)
+      break;
+    else if (words_guessed[i].startsWith(typed)){
+      counter_words ++;
+      predicted = words_guessed[i]; //guarda a palavra possivel na variavel predicted
+    }
+    if (counter_words == 1) {
+      predictions_init[0] = predicted;
+    }
+    else if (counter_words == 2) {
+      predictions_init[1] = predicted;
+    }
+    else if (counter_words == 3) {
+      predictions_init[2] = predicted;
+    }
+  }
 }
 
 // Resets variables for second attempt
 function startSecondAttempt()
 {
-  // Re-randomize the trial order (DO NOT CHANG THESE!)
+  // Re-randomize the trial order (DO NOT CHANGE THESE!)
   shuffle(phrases, true);
   current_trial        = 0;
   target_phrase        = phrases[current_trial];
   
-  // Resets performance variables (DO NOT CHANG THESE!)
+  // Resets performance variables (DO NOT CHANGE THESE!)
   letters_expected     = 0;
   letters_entered      = 0;
   errors               = 0;
