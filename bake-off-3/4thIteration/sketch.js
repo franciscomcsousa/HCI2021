@@ -302,7 +302,7 @@ function mousePressed()
           currently_typed += "k";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "l";
           gWritten = 1;
         }
