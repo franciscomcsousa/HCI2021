@@ -6,7 +6,7 @@
 // p5.js reference: https://p5js.org/reference/
 
 // Database (CHANGE THESE!)
-const GROUP_NUMBER   = 08;     // add your group number here as an integer (e.g., 2, 3)
+const GROUP_NUMBER   = 0;      // add your group number here as an integer (e.g., 2, 3)
 const BAKE_OFF_DAY   = false;  // set to 'true' before sharing during the simulation and bake-off days
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
@@ -63,9 +63,6 @@ let BACKSPACE_HEIGHT;
 let gState = "start";
 let gWritten = 0;
 
-let words = [];
-let predictions = ["the", "and", "of"];
-
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
 {    
@@ -86,9 +83,6 @@ function preload()
   SectionC  = loadImage("data/SectionC.png");
   spacebar  = loadImage("data/spacebar.png");
   backspace = loadImage("data/backspace.png");
-
-  // Loads the txt file that has the predictions
-  words = loadStrings("data/words.txt");
 }
 
 // Runs once at the start
@@ -117,43 +111,22 @@ function draw()
     
     // Draws the non-interactive screen area (4x1cm) -- DO NOT CHANGE SIZE!
     noStroke();
-    fill('#000000');
+    fill(125);
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
-    //textAlign(CENTER); 
-    //textFont("Arial", 16);
-    //fill(0);
-    //text("NOT INTERACTIVE", width/2, height/2 - 1.3 * PPCM);
-
+    textAlign(CENTER); 
+    textFont("Arial", 16);
+    fill(0);
+    text("NOT INTERACTIVE", width/2, height/2 - 1.3 * PPCM);
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
     stroke(0, 255, 0);
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
-    drawPredictions();
-
     draw2Dkeyboard();       // draws our basic 2D keyboard UI
 
     drawFatFinger();        // draws the finger that simulates the 'fat finger' problem
   }
-}
-
-// Draws the words for the predictions in the grey rectangle 
-function drawPredictions() {
-  textAlign(CENTER);
-  textFont("Arial", 12);
-  fill('#FFFFFF');
-  text(predictions[0], width/2 - 1.8 * PPCM, height/2 - 1.3 * PPCM);
-
-  textAlign(CENTER);
-  textFont("Arial", 12);
-  fill('#FFFFFF');
-  text(predictions[1], width/2 - 0.5 * PPCM, height/2 - 1.3 * PPCM);
-
-  textAlign(CENTER);
-  textFont("Arial", 12);
-  fill('#FFFFFF');
-  text(predictions[2], width/2 + 1 * PPCM, height/2 - 1.3 * PPCM);
 }
 
 // Draws 2D keyboard UI (current letter and left and right arrows)
@@ -173,13 +146,13 @@ function draw2Dkeyboard()
     image(backspace, width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT);
   }
   else if(gState == "stateA"){
-    image(SectionA, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
+    image(SectionA, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
   }
   else if(gState == "stateB"){
-    image(SectionB, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONB_WIDTH, SECTIONB_HEIGHT);
+    image(SectionB, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONB_WIDTH, SECTIONB_HEIGHT);
   }
   else if(gState == "stateC"){
-    image(SectionC, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONC_WIDTH, SECTIONC_HEIGHT);
+    image(SectionC, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONC_WIDTH, SECTIONC_HEIGHT);
   }
 }
 
@@ -216,41 +189,40 @@ function mousePressed()
         //Backspace is pressed
         else if(mouseClickWithin(width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT) && currently_typed.length > 0){
           currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-          doPredict();
         }
       }
       
       //StateA keys
       else if(gState == "stateA"){
-        if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "q";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "w";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "e";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "a";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "s";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "d";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "z";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "x";
           gWritten = 1;
         }
@@ -258,48 +230,47 @@ function mousePressed()
           gWritten = 0;
           gState = "start"
         }
-        doPredict();
       }
 
       //StateB keys
       else if(gState == "stateB"){
-        if(mouseClickWithin(width/2 - 3*SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "r";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "t";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "y";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + 3 * SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "u";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "f";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "g";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4 , height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "h";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "c";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "v";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4 , height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "b";
           gWritten = 1;
         }
@@ -307,28 +278,27 @@ function mousePressed()
           gWritten = 0;
           gState = "start"
         }
-        doPredict();
       }
 
       //StateC keys
       else if(gState == "stateC"){
-        if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "i";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "o";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "p";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "j";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "k";
           gWritten = 1;
         }
@@ -336,11 +306,11 @@ function mousePressed()
           currently_typed += "l";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "n";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "m";
           gWritten = 1;
         }
@@ -348,7 +318,6 @@ function mousePressed()
           gWritten = 0;
           gState = "start"
         }
-        doPredict();
       }
     }
     
@@ -391,15 +360,6 @@ function mousePressed()
       }
     }
   }
-}
-
-// function that changes gives 3 predictions of the word you are writing
-function doPredict() {
-
-    if (currently_typed[currently_typed.length - 1] == " ") {
-      
-    }
-
 }
 
 // Resets variables for second attempt
@@ -507,13 +467,13 @@ function windowResized()
   KEYBOARD_WIDTH   = (int)(4 * PPCM);
   KEYBOARD_HEIGHT  = (int)(2 * PPCM);
 
-  SECTIONA_WIDTH   = (int)(3 * PPCM);
+  SECTIONA_WIDTH   = (int)(4 * PPCM);
   SECTIONA_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONB_WIDTH   = (int)(3 * PPCM);
+  SECTIONB_WIDTH   = (int)(4 * PPCM);
   SECTIONB_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONC_WIDTH   = (int)(3 * PPCM);
+  SECTIONC_WIDTH   = (int)(4 * PPCM);
   SECTIONC_HEIGHT  = (int)(3 * PPCM);
 
   SPACEBAR_WIDTH   = (int)(1.3 * PPCM)
