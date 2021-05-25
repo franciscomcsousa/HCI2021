@@ -60,6 +60,9 @@ let SPACEBAR_HEIGHT;
 let BACKSPACE_WIDTH;
 let BACKSPACE_HEIGHT;
 
+let LIGHTBULB_WIDTH;
+let LIGHTBULB_HEIGHT;
+
 let gState = "start";
 let gWritten = 0;
 
@@ -87,6 +90,7 @@ function preload()
   SectionC  = loadImage("data/SectionC.png");
   spacebar  = loadImage("data/spacebar.png");
   backspace = loadImage("data/backspace.png");
+  lightbulb = loadImage("data/lightbulb.png");
 
   // Loads the txt file that has the predictions
   words_guessed = loadStrings("data/words.txt");
@@ -172,6 +176,7 @@ function draw2Dkeyboard()
     image(keyboard, width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH, KEYBOARD_HEIGHT);
     image(spacebar, width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT);
     image(backspace, width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT);
+    image(lightbulb, width/2 - LIGHTBULB_WIDTH/2, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, LIGHTBULB_WIDTH, LIGHTBULB_HEIGHT);
   }
   else if(gState == "stateA"){
     image(SectionA, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
@@ -547,6 +552,9 @@ function windowResized()
 
   BACKSPACE_WIDTH  = (int)(1.3 * PPCM)
   BACKSPACE_HEIGHT = (int)(1 * PPCM)
+
+  LIGHTBULB_WIDTH  = (int)(1.3 * PPCM)
+  LIGHTBULB_HEIGHT = (int)(1 * PPCM)
   
   // Starts drawing the watch immediately after we go fullscreen (DO NO CHANGE THIS!)
   draw_finger_arm = true;
