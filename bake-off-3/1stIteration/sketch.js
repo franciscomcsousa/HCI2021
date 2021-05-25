@@ -6,7 +6,7 @@
 // p5.js reference: https://p5js.org/reference/
 
 // Database (CHANGE THESE!)
-const GROUP_NUMBER   = 0;      // add your group number here as an integer (e.g., 2, 3)
+const GROUP_NUMBER   = 8;      // add your group number here as an integer (e.g., 2, 3)
 const BAKE_OFF_DAY   = false;  // set to 'true' before sharing during the simulation and bake-off days
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
@@ -54,9 +54,14 @@ let SECTIONB_HEIGHT;
 let SECTIONC_WIDTH;
 let SECTIONC_HEIGHT;
 
+let SPACEBAR_WIDTH;
+let SPACEBAR_HEIGHT;
+
+let BACKSPACE_WIDTH;
+let BACKSPACE_HEIGHT;
+
 let gState = "start";
 let gWritten = 0;
-let gEntry;
 
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
@@ -67,15 +72,17 @@ function preload()
     
   // Loads the target phrases (DO NOT CHANGE!)
   phrases = loadStrings("data/phrases.txt");
-  
+
   // Loads UI elements for our basic keyboard
   //leftArrow = loadImage("data/left.png");
   //rightArrow = loadImage("data/right.png");
 
-  keyboard = loadImage("data/keyboard.png");
-  SectionA = loadImage("data/SectionA.png");
-  SectionB = loadImage("data/SectionB.png");
-  SectionC = loadImage("data/SectionC.png");
+  keyboard  = loadImage("data/keyboard.png");
+  SectionA  = loadImage("data/SectionA.png");
+  SectionB  = loadImage("data/SectionB.png");
+  SectionC  = loadImage("data/SectionC.png");
+  spacebar  = loadImage("data/spacebar.png");
+  backspace = loadImage("data/backspace.png");
 }
 
 // Runs once at the start
@@ -135,6 +142,8 @@ function draw2Dkeyboard()
   imageMode(CORNER); 
   if(gState == "start"){
     image(keyboard, width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH, KEYBOARD_HEIGHT);
+    image(spacebar, width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT);
+    image(backspace, width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT);
   }
   else if(gState == "stateA"){
     image(SectionA, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
@@ -156,43 +165,29 @@ function mousePressed()
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
     {  
-      /*    
-      // Check if mouse click was on left arrow (2D keyboard)
-      if (mouseClickWithin(width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE))
-      {
-        current_letter = getPreviousChar(current_letter);
-        if (current_letter.charCodeAt(0) < '_'.charCodeAt(0)) current_letter = 'z';  // wrap around to z
-      }
-      // Check if mouse click was on right arrow (2D keyboard)
-      else if (mouseClickWithin(width/2, height/2, ARROW_SIZE, ARROW_SIZE))
-      {
-        current_letter = getNextChar(current_letter);
-        if (current_letter.charCodeAt(0) > 'z'.charCodeAt(0)) current_letter = '_'; // wrap back to space (i.e., the underscore)
-      }
-      else
-      {
-        // Click in whitespace indicates a character input (2D keyboard)
-        if (current_letter == '_') currently_typed += " ";                          // if underscore, consider that a space bar
-        else if (current_letter == '`' && currently_typed.length > 0)               // if `, treat that as delete
-          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-        else if (current_letter != '`') currently_typed += current_letter;          // if not any of the above cases, add the current letter to the entered phrase
-      }
-    */
-
       if(gState == "start"){
+        //Click within stateA boundaries
         if(mouseClickWithin(width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
           gWritten = 0;
-          gEntry = 1;
           gState = "stateA";
         }
+        //Click within stateB boundaries
         else if(mouseClickWithin(width/2 - KEYBOARD_WIDTH/6, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
-          
+          gWritten = 0;
           gState = "stateB";
         }
+        //Click within stateC boundaries
         else if(mouseClickWithin(width/2 + KEYBOARD_WIDTH/6, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
           gWritten = 0;
-          gEntry = 1;
           gState = "stateC";
+        }
+        //Spacebar is pressed
+        else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT)){
+          currently_typed += " ";
+        }
+        //Backspace is pressed
+        else if(mouseClickWithin(width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT) && currently_typed.length > 0){
+          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
         }
       }
       
@@ -381,12 +376,12 @@ function startSecondAttempt()
   currently_typed      = "";
   CPS                  = 0;
   
-  //current_letter       = 'a';
-  
   // Show the watch and keyboard again
   second_attempt_button.remove();
   draw_finger_arm      = true;
   attempt_start_time   = millis();  
+
+  gState = "start"
 }
 
 // Print and save results at the end of 2 trials
@@ -467,18 +462,24 @@ function windowResized()
   ARM_LENGTH    = (int)(19   * PPCM);
   ARM_HEIGHT    = (int)(11.2 * PPCM);
   
-  //ARROW_SIZE    = (int)(2.2 * PPCM);
-  KEYBOARD_WIDTH =  (int)(4 * PPCM);
-  KEYBOARD_HEIGHT = (int)(2 * PPCM);
+  //ARROW_SIZE     = (int)(2.2 * PPCM);
+  KEYBOARD_WIDTH   = (int)(4 * PPCM);
+  KEYBOARD_HEIGHT  = (int)(2 * PPCM);
 
-  SECTIONA_WIDTH =  (int)(3 * PPCM);
-  SECTIONA_HEIGHT = (int)(3 * PPCM);
+  SECTIONA_WIDTH   = (int)(3 * PPCM);
+  SECTIONA_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONB_WIDTH =  (int)(3 * PPCM);
-  SECTIONB_HEIGHT = (int)(3 * PPCM);
+  SECTIONB_WIDTH   = (int)(3 * PPCM);
+  SECTIONB_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONC_WIDTH =  (int)(3 * PPCM);
-  SECTIONC_HEIGHT = (int)(3 * PPCM);
+  SECTIONC_WIDTH   = (int)(3 * PPCM);
+  SECTIONC_HEIGHT  = (int)(3 * PPCM);
+
+  SPACEBAR_WIDTH   = (int)(1.3 * PPCM)
+  SPACEBAR_HEIGHT  = (int)(1 * PPCM)
+
+  BACKSPACE_WIDTH  = (int)(1.3 * PPCM)
+  BACKSPACE_HEIGHT = (int)(1 * PPCM)
   
   // Starts drawing the watch immediately after we go fullscreen (DO NO CHANGE THIS!)
   draw_finger_arm = true;

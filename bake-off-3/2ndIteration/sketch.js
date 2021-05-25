@@ -6,7 +6,7 @@
 // p5.js reference: https://p5js.org/reference/
 
 // Database (CHANGE THESE!)
-const GROUP_NUMBER   = 8;      // add your group number here as an integer (e.g., 2, 3)
+const GROUP_NUMBER   = 0;      // add your group number here as an integer (e.g., 2, 3)
 const BAKE_OFF_DAY   = false;  // set to 'true' before sharing during the simulation and bake-off days
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
@@ -72,7 +72,7 @@ function preload()
     
   // Loads the target phrases (DO NOT CHANGE!)
   phrases = loadStrings("data/phrases.txt");
-
+  
   // Loads UI elements for our basic keyboard
   //leftArrow = loadImage("data/left.png");
   //rightArrow = loadImage("data/right.png");
@@ -146,13 +146,13 @@ function draw2Dkeyboard()
     image(backspace, width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT);
   }
   else if(gState == "stateA"){
-    image(SectionA, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
+    image(SectionA, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
   }
   else if(gState == "stateB"){
-    image(SectionB, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONB_WIDTH, SECTIONB_HEIGHT);
+    image(SectionB, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONB_WIDTH, SECTIONB_HEIGHT);
   }
   else if(gState == "stateC"){
-    image(SectionC, width/2 - 1.0*PPCM , height/2 - 1.0*PPCM, SECTIONC_WIDTH, SECTIONC_HEIGHT);
+    image(SectionC, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONC_WIDTH, SECTIONC_HEIGHT);
   }
 }
 
@@ -165,6 +165,7 @@ function mousePressed()
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
     {  
+
       if(gState == "start"){
         //Click within stateA boundaries
         if(mouseClickWithin(width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH/3, KEYBOARD_HEIGHT)){
@@ -193,35 +194,35 @@ function mousePressed()
       
       //StateA keys
       else if(gState == "stateA"){
-        if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "q";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "w";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "e";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "a";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "s";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/3, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "d";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "z";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "x";
           gWritten = 1;
         }
@@ -233,43 +234,43 @@ function mousePressed()
 
       //StateB keys
       else if(gState == "stateB"){
-        if(mouseClickWithin(width/2 - 3*SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "r";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "t";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "y";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + 3 * SECTIONB_WIDTH/8, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "u";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "f";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "g";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4 , height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "h";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "c";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "v";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4 , height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "b";
           gWritten = 1;
         }
@@ -281,35 +282,35 @@ function mousePressed()
 
       //StateC keys
       else if(gState == "stateC"){
-        if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "i";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "o";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "p";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "j";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "k";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/3, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "l";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "n";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "m";
           gWritten = 1;
         }
@@ -376,12 +377,12 @@ function startSecondAttempt()
   currently_typed      = "";
   CPS                  = 0;
   
+  //current_letter       = 'a';
+  
   // Show the watch and keyboard again
   second_attempt_button.remove();
   draw_finger_arm      = true;
   attempt_start_time   = millis();  
-
-  gState = "start"
 }
 
 // Print and save results at the end of 2 trials
@@ -466,13 +467,13 @@ function windowResized()
   KEYBOARD_WIDTH   = (int)(4 * PPCM);
   KEYBOARD_HEIGHT  = (int)(2 * PPCM);
 
-  SECTIONA_WIDTH   = (int)(3 * PPCM);
+  SECTIONA_WIDTH   = (int)(4 * PPCM);
   SECTIONA_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONB_WIDTH   = (int)(3 * PPCM);
+  SECTIONB_WIDTH   = (int)(4 * PPCM);
   SECTIONB_HEIGHT  = (int)(3 * PPCM);
 
-  SECTIONC_WIDTH   = (int)(3 * PPCM);
+  SECTIONC_WIDTH   = (int)(4 * PPCM);
   SECTIONC_HEIGHT  = (int)(3 * PPCM);
 
   SPACEBAR_WIDTH   = (int)(1.3 * PPCM)
