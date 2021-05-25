@@ -63,6 +63,14 @@ let BACKSPACE_HEIGHT;
 let LIGHTBULB_WIDTH;
 let LIGHTBULB_HEIGHT;
 
+let PREDICT_WIDTH;
+let PREDICT_HEIGHT;
+
+let SELECT_WIDTH;
+let SELECT_HEIGHT;
+
+let FONT_MULT;
+
 let gState = "start";
 let gWritten = 0;
 
@@ -91,6 +99,10 @@ function preload()
   spacebar  = loadImage("data/spacebar.png");
   backspace = loadImage("data/backspace.png");
   lightbulb = loadImage("data/lightbulb.png");
+  
+  lightest  = loadImage("data/lightest.png");
+  medium    = loadImage("data/medium.png");
+  darkest   = loadImage("data/darkest.png");
 
   // Loads the txt file that has the predictions
   words_guessed = loadStrings("data/words.txt");
@@ -135,30 +147,62 @@ function draw()
     noFill();
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
-    drawPredictions();
+    if(gState == "lightbulb"){
+      drawLightbulb();
+    }
+    else{
+      drawPredictions();
 
-    draw2Dkeyboard();       // draws our basic 2D keyboard UI
+      draw2Dkeyboard();       // draws our basic 2D keyboard UI
+    }
 
     drawFatFinger();        // draws the finger that simulates the 'fat finger' problem
   }
 }
 
+//Draws the elements after clicking the lightbulb
+function drawLightbulb(){
+  imageMode(CORNER);
+  fill('#FFFFFF');
+  rect(width/2 - 2.0*PPCM, height/2 - 2.0 * PPCM, 4.0 * PPCM, 4.0 * PPCM);
+  noFill();
+  
+  //Draw Predict retangles
+  image(darkest, width/2 - 1.0 * PPCM, height/2 - 1.9 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
+  image(medium, width/2 - 1.0 * PPCM, height/2 - 1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
+  image(lightest, width/2 - 1.0 * PPCM, height/2 - 0.1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
+
+  //Draw Select retandgles
+  image(darkest, width/2 - 3 * SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
+  image(medium, width/2 - SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
+  image(lightest, width/2 + SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
+
+  //Draw the help setence
+  stroke(0, 0, 0);
+  textAlign(LEFT);
+  textFont("Arial", 1.3 * FONT_MULT);
+  fill('#000000');
+  text("Click the rectangles bellow", width/2 - 1.9 * PPCM, height/2 + 2 * PPCM - SELECT_HEIGHT - 0.1 * PPCM)
+  
+  //Draw the predictions
+  textAlign(CENTER);
+  textFont("Arial", 2 * FONT_MULT);
+  fill('#FFFFFF');
+  text(predictions_init[0], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 1.9 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[1], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 1 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[2], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 0.1 * PPCM + PREDICT_HEIGHT/2);
+}
+
 // Draws the words for the predictions in the grey rectangle 
 function drawPredictions() {
+  stroke(0, 0, 0);
   textAlign(CENTER);
-  textFont("Arial", 12);
+  textFont("Arial", FONT_MULT);
   fill('#FFFFFF');
-  text(predictions_init[0], width/2 - 1.8 * PPCM, height/2 - 1.3 * PPCM);
-
-  textAlign(CENTER);
-  textFont("Arial", 12);
-  fill('#FFFFFF');
-  text(predictions_init[1], width/2 - 0.5 * PPCM, height/2 - 1.3 * PPCM);
-
-  textAlign(CENTER);
-  textFont("Arial", 12);
-  fill('#FFFFFF');
-  text(predictions_init[2], width/2 + 1 * PPCM, height/2 - 1.3 * PPCM);
+  text(predictions_init[0], width/2 - 1.3 * PPCM, height/2 - 1.3 * PPCM);
+  text(predictions_init[1], width/2, height/2 - 1.3 * PPCM);
+  text(predictions_init[2], width/2 + 1.3 * PPCM, height/2 - 1.3 * PPCM);
+  //stroke(0, 255, 0); perhaps?
 }
 
 // Draws 2D keyboard UI (current letter and left and right arrows)
@@ -218,11 +262,15 @@ function mousePressed()
         //Spacebar is pressed
         else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT)){
           currently_typed += " ";
+          doPredict();
         }
         //Backspace is pressed
         else if(mouseClickWithin(width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT) && currently_typed.length > 0){
           currently_typed = currently_typed.substring(0, currently_typed.length - 1);
           doPredict();
+        }
+        else if(mouseClickWithin(width/2 - LIGHTBULB_WIDTH/2, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, LIGHTBULB_WIDTH, LIGHTBULB_HEIGHT)){
+          gState = "lightbulb";
         }
       }
       
@@ -356,6 +404,25 @@ function mousePressed()
         }
         doPredict();
       }
+      //Lightbulb
+      else if(gState == "lightbulb"){
+        if(mouseClickWithin(width/2 - 3 * SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
+          //code for darkest
+          acceptPredict(predictions_init[0]);
+          gState = "start"
+        }
+        else if(mouseClickWithin(width/2 - SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
+          //code for medium
+          acceptPredict(predictions_init[1]);
+          gState = "start"
+        }
+        else if(mouseClickWithin(width/2 + SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
+          //code for lightest
+          acceptPredict(predictions_init[2]);
+          gState = "start"
+        }
+      }
+      doPredict();
     }
     
     // Check if mouse click happened within 'ACCEPT' 
@@ -414,10 +481,12 @@ function doPredict() {
 
   nr_words = words_guessed.length;
   counter_words = 0;
-  for (i = 0; i < nr_words; i++) {
+  for (i = 0; i < nr_words; i++) 
+  {
     if (counter_words >= 3)
       break;
-    else if (words_guessed[i].startsWith(typed)){
+    else if (words_guessed[i].startsWith(typed))
+    {
       counter_words ++;
       predicted = words_guessed[i]; //guarda a palavra possivel na variavel predicted
     }
@@ -432,6 +501,24 @@ function doPredict() {
     }
   }
 }
+
+
+function acceptPredict(word) {
+  // da nos um array com todas as palavras da frase escrita ate ao momento
+  phrase = split(currently_typed, " ");
+  current_word = phrase[phrase.length -1];
+
+  // inicio de quando nao tem nada escrito (o tamanho da palavra vai ser o mesmo que a previsao)
+  if (currently_typed.length == 0 || currently_typed[currently_typed.length - 1] == " ")
+    currently_typed += word;
+
+  else {
+    // apaga a palavra nao acabada
+    currently_typed = currently_typed.substring(0,currently_typed.length - current_word.length);
+    //adiciona a palavra prevista
+    currently_typed += word;
+  }
+  }
 
 // Resets variables for second attempt
 function startSecondAttempt()
@@ -555,6 +642,14 @@ function windowResized()
 
   LIGHTBULB_WIDTH  = (int)(1.3 * PPCM)
   LIGHTBULB_HEIGHT = (int)(1 * PPCM)
+
+  PREDICT_WIDTH    = (int)(3 * PPCM)
+  PREDICT_HEIGHT   = (int)(0.8 * PPCM)
+
+  SELECT_WIDTH     = (int)(1.3333 * PPCM)
+  SELECT_HEIGHT    = (int)(0.8 * PPCM)
+
+  FONT_MULT = (int)(0.25 * PPCM)
   
   // Starts drawing the watch immediately after we go fullscreen (DO NO CHANGE THIS!)
   draw_finger_arm = true;
