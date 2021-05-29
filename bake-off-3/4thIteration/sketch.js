@@ -172,14 +172,9 @@ function drawLightbulb(){
   noFill();
   
   //Draw Predict retangles
-  image(darkest, width/2 - 1.0 * PPCM, height/2 - 1.9 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
-  image(medium, width/2 - 1.0 * PPCM, height/2 - 1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
-  image(lightest, width/2 - 1.0 * PPCM, height/2 - 0.1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
-
-  //Draw Select retandgles
-  image(darkest, width/2 - 3 * SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
-  image(medium, width/2 - SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
-  image(lightest, width/2 + SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
+  image(darkest, width/2 - 1.0 * PPCM, height/2 - 1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
+  image(medium, width/2 - 1.0 * PPCM, height/2 - 0 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
+  image(lightest, width/2 - 1.0 * PPCM, height/2 + 1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT);
 
   //Draw the go-back button
   image(goback, width/2 - 2.0 * PPCM, height/2 - 1 * PPCM, GOBACK_WIDTH, GOBACK_HEIGHT)
@@ -189,26 +184,26 @@ function drawLightbulb(){
   textAlign(LEFT);
   textFont("Arial", 1.3 * FONT_MULT);
   fill('#000000');
-  text("Click the rectangles bellow", width/2 - 1.9 * PPCM, height/2 + 2 * PPCM - SELECT_HEIGHT - 0.1 * PPCM)
+  text("Click the rectangles bellow", width/2 - 1.9 * PPCM, height/2 - 1.4 * PPCM)
   
   //Draw the predictions
   textAlign(CENTER);
   textFont("Arial", 2 * FONT_MULT);
   fill('#FFFFFF');
-  text(predictions_init[0], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 1.75 * PPCM + PREDICT_HEIGHT/2);
-  text(predictions_init[1], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 0.85 * PPCM + PREDICT_HEIGHT/2);
-  text(predictions_init[2], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 + 0.05 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[0], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 0.85 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[1], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 + 0.15 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[2], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 + 1.15 * PPCM + PREDICT_HEIGHT/2);
 }
 
 // Draws the words for the predictions in the grey rectangle 
 function drawPredictions() {
   stroke(0, 0, 0);
   textAlign(CENTER);
-  textFont("Arial", FONT_MULT);
+  textFont("Arial", 1.5 * FONT_MULT);
   fill('#FFFFFF');
-  text(predictions_init[0], width/2 - 1.3 * PPCM, height/2 - 1.3 * PPCM);
-  text(predictions_init[1], width/2, height/2 - 1.3 * PPCM);
-  text(predictions_init[2], width/2 + 1.3 * PPCM, height/2 - 1.3 * PPCM);
+  text(predictions_init[0], width/2 - 1.1 * PPCM, height/2 - 1.2 * PPCM);
+  text(predictions_init[1], width/2, height/2 - 1.6 * PPCM);
+  text(predictions_init[2], width/2 + 1.1 * PPCM, height/2 - 1.2 * PPCM);
   //stroke(0, 255, 0); perhaps?
 }
 
@@ -414,21 +409,22 @@ function mousePressed()
       }
       //Lightbulb
       else if(gState == "lightbulb"){
-        if(mouseClickWithin(width/2 - 3 * SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
-          //code for darkest
+        //code for darkest
+        if(mouseClickWithin(width/2 - 1.0 * PPCM, height/2 - 1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT)){
           acceptPredict(predictions_init[0]);
           gState = "start"
         }
-        else if(mouseClickWithin(width/2 - SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
-          //code for medium
+        //code for medium
+        else if(mouseClickWithin(width/2 - 1.0 * PPCM, height/2 - 0 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT)){
           acceptPredict(predictions_init[1]);
           gState = "start"
         }
-        else if(mouseClickWithin(width/2 + SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
-          //code for lightest
+        //code for lightest
+        else if(mouseClickWithin(width/2 - 1.0 * PPCM, height/2 + 1 * PPCM, PREDICT_WIDTH, PREDICT_HEIGHT)){
           acceptPredict(predictions_init[2]);
           gState = "start"
         }
+        //code for goback
         else if(mouseClickWithin(width/2 - 2.0 * PPCM, height/2 - 1 * PPCM, GOBACK_WIDTH, GOBACK_HEIGHT)){
           gState = "start"
         }
@@ -662,7 +658,7 @@ function windowResized()
   SELECT_WIDTH     = (int)(1.3333 * PPCM)
   SELECT_HEIGHT    = (int)(0.8 * PPCM)
 
-  GOBACK_WIDTH     = (int)(0.7 * PPCM)
+  GOBACK_WIDTH     = (int)(0.9 * PPCM)
   GOBACK_HEIGHT    = (int)(1.7 * PPCM)
 
   FONT_MULT = (int)(0.25 * PPCM)
