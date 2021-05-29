@@ -69,6 +69,9 @@ let PREDICT_HEIGHT;
 let SELECT_WIDTH;
 let SELECT_HEIGHT;
 
+let GOBACK_WIDTH;
+let GOBACK_HEIGHT;
+
 let FONT_MULT;
 
 let gState = "start";
@@ -99,6 +102,7 @@ function preload()
   spacebar  = loadImage("data/spacebar.png");
   backspace = loadImage("data/backspace.png");
   lightbulb = loadImage("data/lightbulb.png");
+  goback    = loadImage("data/goback.png");
   
   lightest  = loadImage("data/lightest.png");
   medium    = loadImage("data/medium.png");
@@ -177,6 +181,9 @@ function drawLightbulb(){
   image(medium, width/2 - SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
   image(lightest, width/2 + SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)
 
+  //Draw the go-back button
+  image(goback, width/2 - 2.0 * PPCM, height/2 - 1 * PPCM, GOBACK_WIDTH, GOBACK_HEIGHT)
+
   //Draw the help setence
   stroke(0, 0, 0);
   textAlign(LEFT);
@@ -188,9 +195,9 @@ function drawLightbulb(){
   textAlign(CENTER);
   textFont("Arial", 2 * FONT_MULT);
   fill('#FFFFFF');
-  text(predictions_init[0], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 1.9 * PPCM + PREDICT_HEIGHT/2);
-  text(predictions_init[1], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 1 * PPCM + PREDICT_HEIGHT/2);
-  text(predictions_init[2], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 0.1 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[0], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 1.75 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[1], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 - 0.85 * PPCM + PREDICT_HEIGHT/2);
+  text(predictions_init[2], width/2 - 1.0 * PPCM + PREDICT_WIDTH/2, height/2 + 0.05 * PPCM + PREDICT_HEIGHT/2);
 }
 
 // Draws the words for the predictions in the grey rectangle 
@@ -218,9 +225,9 @@ function draw2Dkeyboard()
   imageMode(CORNER); 
   if(gState == "start"){
     image(keyboard, width/2 - KEYBOARD_WIDTH/2, height/2 - KEYBOARD_HEIGHT/2, KEYBOARD_WIDTH, KEYBOARD_HEIGHT);
-    image(spacebar, width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT);
+    image(lightbulb, width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, LIGHTBULB_WIDTH, LIGHTBULB_HEIGHT);
+    image(spacebar, width/2 - SPACEBAR_WIDTH/2, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT);
     image(backspace, width/2 + 2.0*PPCM - BACKSPACE_WIDTH, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, BACKSPACE_WIDTH, BACKSPACE_HEIGHT);
-    image(lightbulb, width/2 - LIGHTBULB_WIDTH/2, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, LIGHTBULB_WIDTH, LIGHTBULB_HEIGHT);
   }
   else if(gState == "stateA"){
     image(SectionA, width/2 - 2.0*PPCM , height/2 - 1.0*PPCM, SECTIONA_WIDTH, SECTIONA_HEIGHT);
@@ -260,7 +267,7 @@ function mousePressed()
           gState = "stateC";
         }
         //Spacebar is pressed
-        else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT)){
+        else if(mouseClickWithin(width/2 - SPACEBAR_WIDTH/2, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, SPACEBAR_WIDTH, SPACEBAR_HEIGHT)){
           currently_typed += " ";
           doPredict();
         }
@@ -269,42 +276,43 @@ function mousePressed()
           currently_typed = currently_typed.substring(0, currently_typed.length - 1);
           doPredict();
         }
-        else if(mouseClickWithin(width/2 - LIGHTBULB_WIDTH/2, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, LIGHTBULB_WIDTH, LIGHTBULB_HEIGHT)){
+        //Lightbulb is pressed
+        else if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 + 2.0*PPCM - KEYBOARD_HEIGHT/2, LIGHTBULB_WIDTH, LIGHTBULB_HEIGHT)){
           gState = "lightbulb";
         }
       }
       
       //StateA keys
       else if(gState == "stateA"){
-        if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/3, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "q";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/3, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "w";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/3, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "e";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/2, height/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "a";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/6, height/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "s";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2 - SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONA_WIDTH/6, height/2, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "d";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONA_WIDTH/3, height/2 + SECTIONA_HEIGHT/3, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "z";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 + SECTIONA_HEIGHT/6, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 + SECTIONA_HEIGHT/3, SECTIONA_WIDTH/3, SECTIONA_HEIGHT/3)){
           currently_typed += "x";
           gWritten = 1;
         }
@@ -317,43 +325,43 @@ function mousePressed()
 
       //StateB keys
       else if(gState == "stateB"){
-        if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/3, SECTIONB_WIDTH/4, SECTIONB_HEIGHT/3)){
           currently_typed += "r";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/3, SECTIONB_WIDTH/4, SECTIONB_HEIGHT/3)){
           currently_typed += "t";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2, height/2 - SECTIONB_HEIGHT/3, SECTIONB_WIDTH/4, SECTIONB_HEIGHT/3)){
           currently_typed += "y";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/4, height/2 - SECTIONB_HEIGHT/3, SECTIONB_WIDTH/4, SECTIONB_HEIGHT/3)){
           currently_typed += "u";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "f";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "g";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 - SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "h";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/2, height/2 + SECTIONB_HEIGHT/3, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "c";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/3, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "v";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/6, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONB_WIDTH/6, height/2 + SECTIONB_HEIGHT/3, SECTIONB_WIDTH/3, SECTIONB_HEIGHT/3)){
           currently_typed += "b";
           gWritten = 1;
         }
@@ -366,31 +374,31 @@ function mousePressed()
 
       //StateC keys
       else if(gState == "stateC"){
-        if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/3, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "i";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/3, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "o";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/3, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "p";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/2, height/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "j";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/6, height/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "k";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2 - SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 + SECTIONC_WIDTH/6, height/2, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "l";
           gWritten = 1;
         }
-        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 + SECTIONC_HEIGHT/6, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
+        else if(mouseClickWithin(width/2 - SECTIONC_WIDTH/3, height/2 + SECTIONC_HEIGHT/3, SECTIONC_WIDTH/3, SECTIONC_HEIGHT/3)){
           currently_typed += "n";
           gWritten = 1;
         }
@@ -419,6 +427,9 @@ function mousePressed()
         else if(mouseClickWithin(width/2 + SELECT_WIDTH/2, height/2 + 2.0 * PPCM - SELECT_HEIGHT, SELECT_WIDTH, SELECT_HEIGHT)){
           //code for lightest
           acceptPredict(predictions_init[2]);
+          gState = "start"
+        }
+        else if(mouseClickWithin(width/2 - 2.0 * PPCM, height/2 - 1 * PPCM, GOBACK_WIDTH, GOBACK_HEIGHT)){
           gState = "start"
         }
       }
@@ -650,6 +661,9 @@ function windowResized()
 
   SELECT_WIDTH     = (int)(1.3333 * PPCM)
   SELECT_HEIGHT    = (int)(0.8 * PPCM)
+
+  GOBACK_WIDTH     = (int)(0.7 * PPCM)
+  GOBACK_HEIGHT    = (int)(1.7 * PPCM)
 
   FONT_MULT = (int)(0.25 * PPCM)
   
