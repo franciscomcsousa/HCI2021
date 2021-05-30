@@ -451,6 +451,7 @@ function mousePressed()
         // Prepares for new trial
         currently_typed = "";
         target_phrase = phrases[current_trial];  
+        doPredict();
       }
       else
       {
@@ -548,6 +549,8 @@ function startSecondAttempt()
   second_attempt_button.remove();
   draw_finger_arm      = true;
   attempt_start_time   = millis();  
+
+  doPredict();
 }
 
 // Print and save results at the end of 2 trials
