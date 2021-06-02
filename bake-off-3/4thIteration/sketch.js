@@ -7,7 +7,7 @@
 
 // Database (CHANGE THESE!)
 const GROUP_NUMBER   = 08;     // add your group number here as an integer (e.g., 2, 3)
-const BAKE_OFF_DAY   = true;  // set to 'true' before sharing during the simulation and bake-off days
+const BAKE_OFF_DAY   = false;  // set to 'true' before sharing during the simulation and bake-off days
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
 let second_attempt_button;     // button that starts the second attempt (DO NOT CHANGE!)
